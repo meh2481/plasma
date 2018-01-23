@@ -50,3 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+*.exe
+*.sln
+*.vcproj*
+*.vcxproj*
+Backup/
+Release/
+*.htm
+*db
+**/.vs
