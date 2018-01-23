@@ -3,17 +3,13 @@
 #define STR(x) ST(x)
 
 static const char *g_ShaderCode =
-"uniform float fGlobalTime;"
+"uniform float t;"
 "void main()"
 "{"
-	"float PI = 3.14159265;"
-	"float x = gl_FragCoord.x / " STR(WIDTH) ";"
-	"float y = gl_FragCoord.y / " STR(HEIGHT) ";"
-	"float v = sin((x*10.+fGlobalTime));"
-	"v+=sin(10.*(x*sin(fGlobalTime/2.)+y*cos(fGlobalTime/3.))+fGlobalTime);"
-	"float cx = x + 0.5*sin(fGlobalTime/5.);"
-	"float cy = y +.5*cos(fGlobalTime/3.);"
-	"v+=sin(sqrt(100.*(cx*cx+cy*cy)+1.)+fGlobalTime);"
-	"vec3 col = vec3(1, sin(PI*v), cos(PI*v));"
-	"gl_FragColor = vec4(col, 1);"
+"vec2 d = gl_FragCoord / vec2(" STR(WIDTH) ", " STR(HEIGHT) ");"
+"float v = sin((d.x*10. + t*.5));"
+"v += sin(10.*(d.x*sin(t / 4.) + d.y*cos(t / 5.)));"
+"vec2 c = vec2(d.x + 0.5*sin(t / 5.), d.y + .5*cos(t / 3.));"
+"v += sin(sqrt(100.*(c.x*c.x + c.y*c.y) + 1.));"
+"gl_FragColor = vec4(cos(v*1.5)*0.8, sin(3.*v + 3.), sin(3.*v), 1);"
 "}";
