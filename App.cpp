@@ -125,8 +125,18 @@ __declspec(naked) void winmain()
 		((PFNGLLINKPROGRAMPROC) wglGetProcAddress("glLinkProgram"))(prog);
 		((PFNGLUSEPROGRAMPROC) wglGetProcAddress("glUseProgram"))(prog);
 
+		GLint globalTime = ((PFNGLGETUNIFORMLOCATIONPROC)wglGetProcAddress("glGetUniformLocation"))(prog, "fGlobalTime");
+		float fTicks = 0;
+		DWORD lastTicks = GetTickCount();
+
 		for (;;)
 		{
+			DWORD ticks = GetTickCount();
+			float diff = ticks - lastTicks;
+			fTicks += diff / 1000.0f;
+			if(globalTime != -1)
+				((PFNGLUNIFORM1FPROC)wglGetProcAddress("glUniform1f"))(globalTime, fTicks);
+
 			glTexCoord3f(0, 0, 1);
 
 			glRects(-1, -1, 1, 1);
@@ -134,6 +144,8 @@ __declspec(naked) void winmain()
 
 			if (GetAsyncKeyState(VK_ESCAPE))
 				break;
+
+			lastTicks = ticks;
 		}
 #ifndef _DEBUG
 	}
